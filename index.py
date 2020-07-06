@@ -14,6 +14,8 @@ def buy(name):
    for a in dict:
       res.append(a)
    h = svmcamera.person()
+   name = h[0]
+   index = h[1]
    return render_template('money.html', colours=res, name = h[0])
 
 @app.route('/login',methods = ['POST', 'GET'])
