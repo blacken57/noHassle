@@ -113,15 +113,15 @@ def create_face_website(name):
             face_img = face_aligned
             img_path = face_folder +name+ str(img_no) + ".jpg"
             cv2.imwrite(img_path, face_img)
-            cv2.rectangle(img, (x, y), (x + w, y + h), (255, 255, 0), 3)
-            cv2.imshow("aligned", face_img)
+            '''cv2.rectangle(img, (x, y), (x + w, y + h), (255, 255, 0), 3)
+            cv2.imshow("aligned", face_img)'''
             img_no += 1
 
-        cv2.imshow("Saving", img)
-        cv2.waitKey(1)
+        #cv2.imshow("Saving", img)
+        #cv2.waitKey(1)
         if img_no == init_img_no + total_imgs:
             break
-
+    cap.release()
     cap.release()
 
 if __name__ == "__main__":
