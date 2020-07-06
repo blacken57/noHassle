@@ -5,19 +5,17 @@ import dlib
 from imutils import face_utils
 from imutils.face_utils import FaceAligner
 
-detector = dlib.get_frontal_face_detector()
-shape_predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
-face_aligner = FaceAligner(shape_predictor, desiredFaceWidth=200)
-
-FACE_DIR = "images/"
-
-
 def create_folder(folder_name):
     if not os.path.exists(folder_name):
         os.mkdir(folder_name)
 
 
-def main():
+def create_face():
+    detector = dlib.get_frontal_face_detector()
+    shape_predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
+    face_aligner = FaceAligner(shape_predictor, desiredFaceWidth=200)
+
+    FACE_DIR = "images/"
     create_folder(FACE_DIR)
     while True:
         name=input("EnterName: ")
@@ -69,5 +67,5 @@ def main():
 
     cap.release()
 
-
-main()
+if __name__ == "__main__":
+    create_face()
