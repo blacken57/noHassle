@@ -6,6 +6,7 @@ app = Flask(__name__)
 
 name = ""
 index = -1
+balance = joblib.load("balance")
 
 @app.route('/buy',methods = ['POST'])
 def buy():
@@ -46,7 +47,8 @@ def Home():
      elif request.form['ques'] == 'Register':
       return render_template('login.html',methods = ['POST','GET'])
      elif request.form['ques'] == 'Balance':
-      return "Hello, Balance zero, lol"
+      names = svmcamera.person()
+      return "Hello, Balance is: "+str(balance[names[1]]) + " and your name is: "+names[0]
 
 
 
