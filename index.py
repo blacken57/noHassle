@@ -37,6 +37,17 @@ def login():
       create_face.create_face_website(user)
       return redirect(url_for('success',name = user))
 
+@app.route('/Home',methods = ['POST', 'GET'])
+def Home():
+   if request.method == 'POST':
+     if request.form['ques'] == 'Buy':
+      names = svmcamera.person()      
+      return render_template('buy.html',person = names[0],methods = ['POST'])
+     elif request.form['ques'] == 'Register':
+      return render_template('login.html',methods = ['POST','GET'])
+     elif request.form['ques'] == 'Balance':
+      return "Hello, Balance zero, lol"
+
 
 
 
