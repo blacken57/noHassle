@@ -4,9 +4,9 @@ import svmcamera
 import joblib
 app = Flask(__name__)
 
-name = ""
 index = -1
-balance = joblib.load("balance")
+name = ""
+#balance = joblib.load("balance")
 naam = joblib.load("name.joblib")
 
 @app.route('/buy',methods = ['POST'])
@@ -32,6 +32,9 @@ def Register():
       res = []
       for a in dict:
          res.append(a)
+      balance = joblib.load("balance")
+      balance.append(0)
+      joblib.dump(balance,"balance")
       #names = svmcamera.person()
       #index = names.index(names[1])
       return render_template('Homepage.html')
@@ -40,19 +43,37 @@ def Register():
 def Home():
    if request.method == 'POST':
      if request.form['ques'] == 'Buy':
-      names = svmcamera.person()      
+      names = svmcamera.person() 
+      index = names[1]
+      name = names[0]     
       return render_template('buy.html',person = names[0],methods = ['POST'])
      elif request.form['ques'] == 'Register':
       return render_template('Register.html',methods = ['POST','GET'])
      elif request.form['ques'] == 'Balance':
       names = svmcamera.person()#names = [name, index]; names[1] = index
-      return "Hello, Balance is: "+str(balance[names[1]]) + " and your name is: "+names[0]
+      name = names[0]
+      index = names[1]
+      balance = joblib.load("balance")
+      #return "Hello, Balance is: "+str(balance[names[1]]) + " and your name is: "+names[0]
+      return render_template('balance.html',bal = balance[index], person = name)
 
-# @app.route('/Balance',methods = ['POST', 'GET'])
-# def Balance():
-#   if request.method == 'POST':
-#     user = request.form['nm']
-#     money = int(user)
+@app.route('/Balance',methods = ['POST', 'GET'])
+def Balance():
+  if request.method == 'POST':
+    if request.form['Button'] == 'Add':
+      user = request.form['nm']
+      money = int(user)
+      #print(money)
+      ls = svmcamera.person()
+      name = ls[0]
+      index = ls[1]
+      print("Index is: "+name)
+      balance = joblib.load("balance")
+      balance[index] += money
+      joblib.dump(balance,"balance")
+      return "Success, balance added. Now it is: "+str(balance[index])
+    elif request.form['Button'] == 'HomePage':
+      return render_template('Homepage.html')
 
 
 
