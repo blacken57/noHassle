@@ -1,13 +1,15 @@
-from flask import Flask, redirect, url_for, request, render_template
+from flask import Flask, redirect, url_for, request, render_template, flash
 import create_face
 import svmcamera
 import joblib
 app = Flask(__name__)
-
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 index = -1
 name = ""
 #balance = joblib.load("balance")
 naam = joblib.load("name.joblib")
+menuitems ={'Chair': 100, 'Table': 150, 'Mask': 50, 'Sanitizer' : 80,'Azithromycin' : 80}
+
 
 @app.route('/buy',methods = ['POST'])
 def buy():
@@ -18,9 +20,34 @@ def buy():
    if request.method == 'POST':
      if request.form['ques'] == 'Yes':
       
-      return render_template('products.html')
+      return render_template('products.html', menuitems=menuitems)
      elif request.form['ques'] == 'No':
       return render_template('Register.html',methods = ['POST','GET'])
+
+@app.route('/products',methods = ['POST'])
+def products():
+  if request.method == 'POST' and request.form['buy']== 'Buy':
+     names =[]
+     prices = []
+     value = request.form.getlist('add')
+     count =0
+     bill = ""
+     for i in value:
+        names.append(i)
+        prices.append(menuitems[names[-1]])
+        bill = bill + " " + i + " " + str(menuitems[i]) + "\n"
+     print(value) 
+     balance = joblib.load("balance")
+     names = svmcamera.person()
+     s=sum(prices)
+     if (balance[names[1]]) - s >= 0:    
+        balance[names[1]]= (balance[names[1]]) - s
+        joblib.dump(balance, 'balance')
+        return bill + "\n" + "Total bill is: " + str(s)
+     else:
+        flash("Do not have enough balance. Add " + str(s- balance[names[1]]))
+        return render_template('balance.html',bal = balance[names[1]], person = names[0], method='POST')
+
 
 @app.route('/Register',methods = ['POST', 'GET'])
 def Register():
@@ -75,7 +102,11 @@ def Balance():
     elif request.form['Button'] == 'HomePage':
       return render_template('Homepage.html')
 
-
+@app.route('/Train',methods = ['POST', 'GET'])
+def Train():
+  sc.svm_weight_create()
+  a = joblib.load('name.joblib')
+  return "Success on training. "+str(len(a))+" members."
 
 
 
