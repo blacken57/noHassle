@@ -1,9 +1,9 @@
-<html>
-   <body>
+{% extends "layout.html" %}
+
+	{% block content %}
       <form action = "http://localhost:5000/buy" method = "post">
          <p>Are you {{person}}?</p>
          <input type="submit" name="ques" value="Yes">
          <input type="submit" name="ques" value="No">
       </form>
-   </body>
-</html>
+    {% endblock %}  

@@ -1,5 +1,7 @@
-<html>
-   <body>
+{% extends "layout.html" %}
+
+	{% block content %}
+
    	  {% with messages = get_flashed_messages() %}
 			{% if messages %}
 				<ul class=flashes>
@@ -17,5 +19,4 @@
          <input type = "submit" name = "Button" value = "Add" />
          <input type = "submit" name = "Button" value = "HomePage" />
       </form>
-   </body>
-</html>
+    {% endblock %}
